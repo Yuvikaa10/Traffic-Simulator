@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Network Traffic Simulator</h1>
+    <form action="/simulate" method="POST">
+        <label for="traffic_type">Traffic Types:</label><br>
+        <input type="checkbox" id="http" name="traffic_type" value="HTTP"> <span class="traffic-label">HTTP</span><br>
+        <input type="checkbox" id="ftp" name="traffic_type" value="FTP"> <span class="traffic-label">FTP</span><br>
+        <input type="checkbox" id="icmp" name="traffic_type" value="ICMP"> <span class="traffic-label">ICMP</span><br><br>
+        
+        <label for="duration">Duration (seconds):</label>
+        <input type="number" id="duration" name="duration" min="1" value="10"><br><br>
+        
+        <input type="submit" value="Simulate">
+    </form>
+
+    {% if graphs %}
+    <h2>Simulation Results</h2>
+    <p>Duration: {{ duration }} seconds</p>
+    <div id="graphs">
+        {% for traffic_type, img_data in graphs.items() %}
+            <h3 style="color: #ff6f61;">{{ traffic_type }} Traffic</h3>
+            <img src="data:image/png;base64,{{ img_data }}" alt="Traffic Graph for {{ traffic_type }}">
+            <p><strong>Details:</strong> {{ details[traffic_type] }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+</html>
